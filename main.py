@@ -8,7 +8,7 @@ from itertools import cycle
 from tools import read_controls, draw_frame, fire, get_frame_size
 
 
-async def animate_spaceship(canvas, row, column, rows, columns, height, width, ship1, ship2):
+async def animate_spaceship(canvas, row, column, ships_height, ships_width, height, width, ship1, ship2):
     ships = [ship1, ship2]
     iterator = cycle(ships)
     frame = next(iterator)
@@ -18,10 +18,10 @@ async def animate_spaceship(canvas, row, column, rows, columns, height, width, s
             rows_direction, columns_direction, space_pressed = read_controls(canvas)
             frame = next(iterator)
             if (row + rows_direction) > 0:
-                if (row + rows_direction + rows) < height:
+                if (row + rows_direction + ships_height) < height:
                     row += rows_direction
             if (column + columns_direction) > 0:
-                if (column + columns_direction + columns) < width:
+                if (column + columns_direction + ships_width) < width:
                     column += columns_direction
             draw_frame(canvas, row, column, frame)
             canvas.refresh()
