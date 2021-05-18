@@ -1,9 +1,6 @@
 import asyncio
 import curses
-import random
-import time
 
-from itertools import cycle
 
 SPACE_KEY_CODE = 32
 LEFT_KEY_CODE = 260

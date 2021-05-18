@@ -48,32 +48,55 @@ async def blink(canvas, row, column, symbol='*'):
             await asyncio.sleep(0)
 
 
-def draw(canvas):
-    canvas.border()
-    curses.curs_set(False)
-    canvas.nodelay(True)
-    coroutines = []
+def make_stars(canvas, height, width):
     number_of_stars = random.randint(25, 100)
     stars = '+*.:'
-    height, width = canvas.getmaxyx()
+    coroutines = []
     for i in range(number_of_stars):
         row = random.randint(2, height - 2)
         column = random.randint(2, width - 2)
         star = random.choice(stars)
         coroutine = blink(canvas, row, column, symbol=star)
         coroutines.append(coroutine)
+    return coroutines
+
+
+def make_shot(canvas, height, width):
     start_row, start_column = height // 2, width // 2
     shot = fire(canvas, start_row, start_column)
-    coroutines.append(shot)
+    return shot
+
+
+def make_ship(canvas, height, width):
     with open("./animations/rocket_frame_1.txt", "r") as my_file:
         ship1 = my_file.read()
     with open("./animations/rocket_frame_2.txt", "r") as my_file:
         ship2 = my_file.read()
-    rows, columns = get_frame_size(ship1)
-    start_row = (height // 2) - (rows // 2)
-    start_column = (width // 2) - (columns // 2)
-    spaceship = animate_spaceship(canvas, start_row, start_column, rows, columns, height, width, ship1, ship2)
-    coroutines.append(spaceship)
+    ships_height, ships_width = get_frame_size(ship1)
+    start_row = (height // 2) - (ships_height // 2)
+    start_column = (width // 2) - (ships_width // 2)
+    spaceship = animate_spaceship(canvas,
+                                  start_row,
+                                  start_column,
+                                  ships_height,
+                                  ships_width,
+                                  height,
+                                  width,
+                                  ship1,
+                                  ship2,
+                                  )
+    return spaceship
+
+
+def draw(canvas):
+    canvas.border()
+    curses.curs_set(False)
+    canvas.nodelay(True)
+    coroutines = []
+    height, width = canvas.getmaxyx()
+    coroutines.extend(make_stars(canvas, height, width))
+    coroutines.append(make_shot(canvas, height, width))
+    coroutines.append(make_ship(canvas, height, width))
     while True:
         for coroutine in coroutines.copy():
             try:
