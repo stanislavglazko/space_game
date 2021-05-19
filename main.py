@@ -8,24 +8,23 @@ from itertools import cycle
 from tools import read_controls, draw_frame, fire, get_frame_size
 
 
-async def animate_spaceship(canvas, row, column, ships_height, ships_width, height, width, ship1, ship2):
-    ships = [ship1, ship2]
+async def animate_spaceship(canvas, row, column, ships_height, ships_width, height, width, ship_frame_1, ship_frame_2):
+    ships = [ship_frame_1, ship_frame_1, ship_frame_2, ship_frame_2]
     iterator = cycle(ships)
-    frame = next(iterator)
-    while True:
-        for _ in range(2):
-            draw_frame(canvas, row, column, frame, negative=True)
-            rows_direction, columns_direction, space_pressed = read_controls(canvas)
-            frame = next(iterator)
-            if (row + rows_direction) > 0:
-                if (row + rows_direction + ships_height) < height:
-                    row += rows_direction
-            if (column + columns_direction) > 0:
-                if (column + columns_direction + ships_width) < width:
-                    column += columns_direction
-            draw_frame(canvas, row, column, frame)
-            canvas.refresh()
-            time.sleep(1)
+    current_frame = next(iterator)
+    for frame in iterator:
+        draw_frame(canvas, row, column, current_frame, negative=True)
+        rows_direction, columns_direction, space_pressed = read_controls(canvas)
+        if (row + rows_direction) > 0:
+            if (row + rows_direction + ships_height) < height:
+                row += rows_direction
+        if (column + columns_direction) > 0:
+            if (column + columns_direction + ships_width) < width:
+                column += columns_direction
+        draw_frame(canvas, row, column, frame)
+        current_frame = frame
+        canvas.refresh()
+        time.sleep(1)
         await asyncio.sleep(0)
 
 
@@ -68,11 +67,11 @@ def make_shot(canvas, height, width):
 
 
 def make_ship(canvas, height, width):
-    with open("./animations/rocket_frame_1.txt", "r") as my_file:
-        ship1 = my_file.read()
-    with open("./animations/rocket_frame_2.txt", "r") as my_file:
-        ship2 = my_file.read()
-    ships_height, ships_width = get_frame_size(ship1)
+    with open("./animations/rocket_frame_1.txt", "r") as frame1:
+        ship_frame_1 = frame1.read()
+    with open("./animations/rocket_frame_2.txt", "r") as frame2:
+        ship_frame_2 = frame2.read()
+    ships_height, ships_width = get_frame_size(ship_frame_1)
     start_row = (height // 2) - (ships_height // 2)
     start_column = (width // 2) - (ships_width // 2)
     spaceship = animate_spaceship(canvas,
@@ -82,8 +81,8 @@ def make_ship(canvas, height, width):
                                   ships_width,
                                   height,
                                   width,
-                                  ship1,
-                                  ship2,
+                                  ship_frame_1,
+                                  ship_frame_2,
                                   )
     return spaceship
 
