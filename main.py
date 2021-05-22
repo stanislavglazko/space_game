@@ -13,8 +13,8 @@ async def animate_spaceship(canvas, row, column, ships_height, ships_width, heig
     iterator = cycle(ships)
     current_frame = next(iterator)
     for frame in iterator:
-        draw_frame(canvas, row, column, current_frame, negative=True)
         rows_direction, columns_direction, space_pressed = read_controls(canvas)
+        draw_frame(canvas, row, column, current_frame, negative=True)
         if (row + rows_direction) > 0:
             if (row + rows_direction + ships_height) < height:
                 row += rows_direction
@@ -23,7 +23,6 @@ async def animate_spaceship(canvas, row, column, ships_height, ships_width, heig
                 column += columns_direction
         draw_frame(canvas, row, column, frame)
         current_frame = frame
-        canvas.refresh()
         time.sleep(1)
         await asyncio.sleep(0)
 
@@ -100,9 +99,9 @@ def draw(canvas):
         for coroutine in coroutines.copy():
             try:
                 coroutine.send(None)
-                canvas.refresh()
             except StopIteration:
                 coroutines.remove(coroutine)
+        canvas.refresh()
         time.sleep(1)
 
 
