@@ -10,6 +10,7 @@ from tools import read_controls, draw_frame, fire, get_frame_size
 
 PATH_TO_ANIMATION = './animations/'
 FRAMES_FOR_GARBAGE = ['trash_large.txt', 'trash_small.txt', 'trash_xl.txt']
+SHIP_FRAMES = ['rocket_frame_1.txt', 'rocket_frame_2.txt']
 
 
 async def animate_spaceship(canvas, row, column, ships_height, ships_width, height, width, ship_frame_1, ship_frame_2):
@@ -86,9 +87,9 @@ def make_shot(canvas, height, width):
 
 
 def make_ship(canvas, height, width):
-    with open("./animations/rocket_frame_1.txt", "r") as frame1:
+    with open(f'{PATH_TO_ANIMATION}rocket_frame_1.txt', "r") as frame1:
         ship_frame_1 = frame1.read()
-    with open("./animations/rocket_frame_2.txt", "r") as frame2:
+    with open(f'{PATH_TO_ANIMATION}rocket_frame_2.txt', "r") as frame2:
         ship_frame_2 = frame2.read()
     ships_height, ships_width = get_frame_size(ship_frame_1)
     start_row = (height // 2) - (ships_height // 2)
