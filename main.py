@@ -5,7 +5,11 @@ import time
 
 from itertools import cycle
 
+from space_garbage import fly_garbage
 from tools import read_controls, draw_frame, fire, get_frame_size
+
+PATH_TO_ANIMATION = './animations/'
+FRAMES_FOR_GARBAGE = ['trash_large.txt', 'trash_small.txt', 'trash_xl.txt']
 
 
 async def animate_spaceship(canvas, row, column, ships_height, ships_width, height, width, ship_frame_1, ship_frame_2):
@@ -23,7 +27,7 @@ async def animate_spaceship(canvas, row, column, ships_height, ships_width, heig
                 column += columns_direction
         draw_frame(canvas, row, column, frame)
         current_frame = frame
-        time.sleep(1)
+        time.sleep(0)
         await asyncio.sleep(0)
 
 
@@ -57,6 +61,22 @@ def make_stars(canvas, height, width):
         coroutine = blink(canvas, row, column, symbol=star)
         coroutines.append(coroutine)
     return coroutines
+
+
+async def fill_orbit_with_garbage(coroutines, canvas, width):
+    garbage_frames = make_garbage_frames()
+    while True:
+        coroutines.append(fly_garbage(canvas, random.randint(0, width), random.choice(garbage_frames)))
+        await asyncio.sleep(0)
+
+
+def make_garbage_frames():
+    frames = []
+    for frame in FRAMES_FOR_GARBAGE:
+        with open(f'{PATH_TO_ANIMATION}{frame}') as garbage_file:
+            frame = garbage_file.read()
+            frames.append(frame)
+    return frames
 
 
 def make_shot(canvas, height, width):
@@ -93,6 +113,7 @@ def draw(canvas):
     coroutines = []
     height, width = canvas.getmaxyx()
     coroutines.extend(make_stars(canvas, height, width))
+    coroutines.append(fill_orbit_with_garbage(coroutines, canvas, width))
     coroutines.append(make_shot(canvas, height, width))
     coroutines.append(make_ship(canvas, height, width))
     while True:
