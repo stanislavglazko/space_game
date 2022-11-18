@@ -1,6 +1,6 @@
 # Space game
-Simple game about travelling in space. You are a spaceship pilot. 
-Fly through the stars. 
+Simple game about travelling in space. You are a spaceship pilot.
+Fly through the stars. Destroy space garbage.
 
 ### How to install
 1) Python3 should be already installed.
@@ -12,7 +12,9 @@ Fly through the stars.
     ```
     python3 main.py 
     ```
-2) Enjoy playing game
+2) Press space to shoot space garbage (this feature is avaible after the 2020 game year)
+3) Read interesting information about space in the left bottom corner of the screen 
+4) Enjoy the game
 
 ### Project Goals
 
