@@ -43,11 +43,11 @@ async def fly_garbage(canvas, column, garbage_frame, speed=0.2):
     column = max(column, 0)
     column = min(column, columns_number - 1)
 
-    garbaga_height, garbage_width = get_frame_size(garbage_frame)
+    garbage_height, garbage_width = get_frame_size(garbage_frame)
 
     row = 0
     
-    obstacle = Obstacle(row, column, garbaga_height, garbage_width)
+    obstacle = Obstacle(row, column, garbage_height, garbage_width)
     timeline.obstacles.append(obstacle)
     while row < rows_number:
         if obstacle in timeline.obstacles_in_last_collisions:

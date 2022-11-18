@@ -3,7 +3,6 @@ import time
 
 import timeline
 from timeline import change_current_year, show_year
-
 from spaceship import make_spaceship
 from stars import make_stars
 from space_garbage import fill_orbit_with_garbage
