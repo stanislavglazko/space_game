@@ -1,6 +1,6 @@
 import asyncio
 import curses
-from obstacles import obstacles, obstacles_in_last_collisions
+import timeline
 
 
 async def fire(canvas, start_row, start_column, rows_speed=-0.7, columns_speed=0):
@@ -26,9 +26,9 @@ async def fire(canvas, start_row, start_column, rows_speed=-0.7, columns_speed=0
     curses.beep()
 
     while 0 < row < max_row and 0 < column < max_column:
-        for obstacle in obstacles:
+        for obstacle in timeline.obstacles:
             if obstacle.has_collision(row, column):
-                obstacles_in_last_collisions.append(obstacle)
+                timeline.obstacles_in_last_collisions.append(obstacle)
                 return
         canvas.addstr(round(row), round(column), symbol)
         await asyncio.sleep(0)
