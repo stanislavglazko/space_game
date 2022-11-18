@@ -10,11 +10,11 @@ from obstacles import Obstacle
 from settings import GARBAGE_FRAMES, PATH_TO_ANIMATIONS, first_year_with_garbage
 
 
-async def fill_orbit_with_garbage(coroutines, canvas, canvas_width):
+async def fill_orbit_with_garbage(canvas, canvas_width):
     garbage_frames = get_garbage_frames()
     while True:
         if timeline.current_year >= first_year_with_garbage:
-            coroutines.append(
+            timeline.coroutines.append(
                 fly_garbage(
                     canvas,
                     random.randint(0, canvas_width),

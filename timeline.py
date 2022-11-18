@@ -5,6 +5,8 @@ from settings import speed_of_change_of_the_current_year, start_year
 
 current_year = start_year
 
+coroutines = []
+
 obstacles = []
 obstacles_in_last_collisions = []
 

@@ -16,13 +16,12 @@ from settings import (
 )
 
 
-def make_spaceship(coroutines, canvas, canvas_height, canvas_width):
+def make_spaceship(canvas, canvas_height, canvas_width):
     ship_frame1, ship_frame2 = get_ship_frames()
     ships_height, ships_width = get_frame_size(ship_frame1)
     start_row = (canvas_height // 2) - (ships_height // 2)
     start_column = (canvas_width // 2) - (ships_width // 2)
     animated_spaceship = animate_spaceship(
-        coroutines,
         canvas,
         start_row,
         start_column,
@@ -45,7 +44,6 @@ def get_ship_frames():
 
 
 async def animate_spaceship(
-    coroutines,
     canvas,
     start_row,
     start_column,
@@ -65,7 +63,7 @@ async def animate_spaceship(
         for obstacle in timeline.obstacles:
             if obstacle.has_collision(row, column):
                 draw_frame(canvas, row, column, current_ship_frame, negative=True)
-                coroutines.append(show_game_over(canvas, start_row, start_column))
+                timeline.coroutines.append(show_game_over(canvas, start_row, start_column))
                 return
         rows_direction, columns_direction, space_pressed = read_controls(canvas)
         draw_frame(canvas, row, column, current_ship_frame, negative=True)
@@ -75,7 +73,7 @@ async def animate_spaceship(
         if column + column_speed > 0 and column + column_speed + ships_width < canvas_width:
             column += column_speed
         if space_pressed and timeline.current_year >= first_year_with_weapon:
-            coroutines.append(fire(canvas, row, column + ships_width // 2, rows_speed=-1))
+            timeline.coroutines.append(fire(canvas, row, column + ships_width // 2, rows_speed=-1))
         draw_frame(canvas, row, column, frame)
         current_ship_frame = frame
         time.sleep(0)
