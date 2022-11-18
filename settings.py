@@ -7,4 +7,4 @@ GAME_OVER_FRAME = 'game_over.txt'
 start_year = 1957
 first_year_with_garbage = 1961
 first_year_with_weapon = 2020
-speed_of_change_of_the_current_year = 1
+speed_of_change_of_the_current_year = 0.5
