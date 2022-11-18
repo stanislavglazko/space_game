@@ -2,6 +2,7 @@ from async_tools import sleep
 from curses_tools import draw_frame, get_frame_size
 from settings import GAME_OVER_FRAME, PATH_TO_ANIMATIONS
 
+
 async def show_game_over(canvas, start_row, start_column):
     game_over_frame = get_game_over_frame()
     _, frame_width = get_frame_size(game_over_frame)

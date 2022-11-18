@@ -2,11 +2,11 @@ import curses
 import random
 
 from async_tools import sleep
-from settings import STAR_FRAMES
+from settings import MAX_NUMBER_OF_STARS, MIN_NUMBER_OF_STARS , STAR_FRAMES
 
 
 def make_stars(canvas, canvas_height, canvas_width):
-    number_of_stars = random.randint(25, 100)
+    number_of_stars = random.randint(MIN_NUMBER_OF_STARS, MAX_NUMBER_OF_STARS)
     coroutines = []
     for _ in range(number_of_stars):
         row = random.randint(2, canvas_height - 2)
