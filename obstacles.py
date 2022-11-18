@@ -51,7 +51,8 @@ async def show_obstacles(canvas, obstacles):
         boxes = []
 
         for obstacle in obstacles:
-            boxes.append(obstacle.dump_bounding_box())
+            if obstacle not in obstacles_in_last_collisions:
+                boxes.append(obstacle.dump_bounding_box())
         
         for row, column, frame in boxes:
             draw_frame(canvas, row, column, frame)
