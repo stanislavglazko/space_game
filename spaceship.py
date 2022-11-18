@@ -16,49 +16,18 @@ from settings import (
 )
 
 
-def make_spaceship(canvas, canvas_height, canvas_width):
+async def run_spaceship(canvas, canvas_height, canvas_width):
     ship_frame1, ship_frame2 = get_ship_frames()
     ships_height, ships_width = get_frame_size(ship_frame1)
-    start_row = (canvas_height // 2) - (ships_height // 2)
-    start_column = (canvas_width // 2) - (ships_width // 2)
-    animated_spaceship = animate_spaceship(
-        canvas,
-        start_row,
-        start_column,
-        ships_height,
-        ships_width,
-        canvas_height,
-        canvas_width,
-        ship_frame1,
-        ship_frame2,
-    )
-    return animated_spaceship
+    ship_frames = [ship_frame1, ship_frame1, ship_frame2, ship_frame2]
 
-
-def get_ship_frames():
-    with open(f'{PATH_TO_ANIMATIONS}{SHIP_FRAMES[0]}', 'r') as frame1:
-        ship_frame1 = frame1.read()
-    with open(f'{PATH_TO_ANIMATIONS}{SHIP_FRAMES[1]}', 'r') as frame2:
-        ship_frame2 = frame2.read()
-    return ship_frame1, ship_frame2
-
-
-async def animate_spaceship(
-    canvas,
-    start_row,
-    start_column,
-    ships_height,
-    ships_width,
-    canvas_height,
-    canvas_width,
-    ship_frame_1,
-    ship_frame_2,
-    ):
+    start_row, start_column = get_start_point(canvas_height, canvas_width, ships_height, ships_width)
     row, column = start_row, start_column
-    ship_frames = [ship_frame_1, ship_frame_1, ship_frame_2, ship_frame_2]
+
     row_speed = column_speed = 0
     iterator = cycle(ship_frames)
     current_ship_frame = next(iterator)
+
     for frame in iterator:
         for obstacle in timeline.obstacles:
             if obstacle.has_collision(row, column):
@@ -78,3 +47,17 @@ async def animate_spaceship(
         current_ship_frame = frame
         time.sleep(0)
         await sleep()
+
+
+def get_ship_frames():
+    with open(f'{PATH_TO_ANIMATIONS}{SHIP_FRAMES[0]}', 'r') as frame1:
+        ship_frame1 = frame1.read()
+    with open(f'{PATH_TO_ANIMATIONS}{SHIP_FRAMES[1]}', 'r') as frame2:
+        ship_frame2 = frame2.read()
+    return ship_frame1, ship_frame2
+
+
+def get_start_point(canvas_height, canvas_width, ships_height, ships_width):
+    start_row = (canvas_height // 2) - (ships_height // 2)
+    start_column = (canvas_width // 2) - (ships_width // 2)
+    return start_row, start_column

@@ -3,7 +3,7 @@ import time
 
 import timeline
 from timeline import change_current_year, show_year
-from spaceship import make_spaceship
+from spaceship import run_spaceship
 from stars import make_stars
 from space_garbage import fill_orbit_with_garbage
 
@@ -15,7 +15,7 @@ def draw(canvas):
     canvas_height, canvas_width = canvas.getmaxyx()
     timeline.coroutines.append(show_year(canvas, canvas_height))
     timeline.coroutines.extend(make_stars(canvas, canvas_height, canvas_width))
-    timeline.coroutines.append(make_spaceship(canvas, canvas_height, canvas_width))
+    timeline.coroutines.append(run_spaceship(canvas, canvas_height, canvas_width))
     timeline.coroutines.append(fill_orbit_with_garbage(canvas, canvas_width))
     timeline.coroutines.append(change_current_year())
     while True:
