@@ -12,7 +12,7 @@ Fly through the stars. Destroy space garbage.
     ```
     python3 main.py 
     ```
-2) Press space to shoot space garbage (this feature is avaible after the 2020 game year)
+2) Press space to shoot space garbage (this feature is available after the 2020 game year)
 3) Read interesting information about space in the left bottom corner of the screen 
 4) Enjoy the game
 
