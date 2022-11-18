@@ -1,5 +1,5 @@
 import asyncio
-from obstacles import Obstacle
+from obstacles import Obstacle, obstacles_in_last_collisions
 from tools import draw_frame, get_frame_size
 
 
@@ -18,6 +18,9 @@ async def fly_garbage(obstacles, canvas, column, garbage_frame, speed=0.5):
     obstacle = Obstacle(row, column, garbaga_height, garbage_width)
     obstacles.append(obstacle)
     while row < rows_number:
+        if obstacle in obstacles_in_last_collisions:
+            obstacles_in_last_collisions.remove(obstacle)
+            return
         obstacle.row = row
         draw_frame(canvas, row, column, garbage_frame)
         await asyncio.sleep(0)
