@@ -6,13 +6,16 @@ import time
 from itertools import cycle
 
 from physics import update_speed
+from obstacles import show_obstacles
 from space_garbage import fly_garbage
 from tools import read_controls, draw_frame, fire, get_frame_size
 
-PATH_TO_ANIMATION = './animations/'
+PATH_TO_ANIMATIONS = './animations/'
 FRAMES_FOR_GARBAGE = ['trash_large.txt', 'trash_small.txt', 'trash_xl.txt']
 SHIP_FRAMES = ['rocket_frame_1.txt', 'rocket_frame_2.txt']
 STARS = '+*.:'
+
+obstacles = []
 
 
 async def sleep(tics=1):
@@ -80,16 +83,16 @@ def make_stars(canvas, canvas_height, canvas_width):
 
 
 async def fill_orbit_with_garbage(coroutines, canvas, canvas_width):
-    garbage_frames = make_garbage_frames()
+    garbage_frames = get_garbage_frames()
     while True:
-        coroutines.append(fly_garbage(canvas, random.randint(0, canvas_width), random.choice(garbage_frames)))
+        coroutines.append(fly_garbage(obstacles, canvas, random.randint(0, canvas_width), random.choice(garbage_frames)))
         await sleep()
 
 
-def make_garbage_frames():
+def get_garbage_frames():
     frames = []
     for frame in FRAMES_FOR_GARBAGE:
-        with open(f'{PATH_TO_ANIMATION}{frame}') as garbage_file:
+        with open(f'{PATH_TO_ANIMATIONS}{frame}') as garbage_file:
             frame = garbage_file.read()
             frames.append(frame)
     return frames
@@ -116,9 +119,9 @@ def make_ship(coroutines, canvas, canvas_height, canvas_width):
 
 
 def get_ship_frames():
-    with open(f'{PATH_TO_ANIMATION}{SHIP_FRAMES[0]}', 'r') as frame1:
+    with open(f'{PATH_TO_ANIMATIONS}{SHIP_FRAMES[0]}', 'r') as frame1:
         ship_frame1 = frame1.read()
-    with open(f'{PATH_TO_ANIMATION}{SHIP_FRAMES[1]}', 'r') as frame2:
+    with open(f'{PATH_TO_ANIMATIONS}{SHIP_FRAMES[1]}', 'r') as frame2:
         ship_frame2 = frame2.read()
     return ship_frame1, ship_frame2
 
@@ -131,6 +134,7 @@ def draw(canvas):
     canvas_height, canvas_width = canvas.getmaxyx()
     coroutines.extend(make_stars(canvas, canvas_height, canvas_width))
     coroutines.append(fill_orbit_with_garbage(coroutines, canvas, canvas_width))
+    coroutines.append(show_obstacles(canvas, obstacles))
     coroutines.append(make_ship(coroutines, canvas, canvas_height, canvas_width))
     while True:
         for coroutine in coroutines.copy():
